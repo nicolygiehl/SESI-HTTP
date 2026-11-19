@@ -10,13 +10,13 @@ let alunos= [
     {
         id: 1,
         nome: "Nicoly",
-        email: "nicoly@gmail.com",
+        email: "nicoly@email.com",
         turma: "TDS2026"
     },
     {
         id: 2,
         nome: "Ana",
-        email: "ana@gmail.com",
+        email: "ana@email.com",
         turma: "TDS2026"
     },
 ];
@@ -37,10 +37,11 @@ app.get("/alunos/:id", (req, res) =>{
             mensagem: "Aluno não econtrado."
         })
     }
+    res.status(200).json(aluno);
 })
 
 //POST - Cadastrar aluno
-app.post("/aluno", (req, res) => {
+app.post("/alunos", (req, res) => {
     const { nome, email, turma } = req.body;
 
     if(!nome || !email || !turma){
@@ -62,10 +63,10 @@ app.post("/aluno", (req, res) => {
 })
 
 //PUT - atalizar aluno
-app.put("/aluno/:id", (rec, res) => {
-    const id = Number(rec.params.id);
+app.put("/aluno/:id", (req, res) => {
+    const id = Number(req.params.id);
 
-    const indice = alunos .findIndex(a => a.id === id);
+    const indice = alunos.findIndex(a => a.id === id);
 
     if(indice === -1) {
         return res.status(404).json({
@@ -73,7 +74,7 @@ app.put("/aluno/:id", (rec, res) => {
         });
     }
 
-    const { nome, email, tura } = rec.body;
+    const { nome, email, turma } = req.body;
 
      if(!nome || !email || !turma){
         return res.status(400).json({
@@ -93,7 +94,7 @@ app.put("/aluno/:id", (rec, res) => {
 
 //DELETE - Excluir aluno - desafio montar estrutura 
 
-app.delete("/aluno/:id", (rec, res) => {
+app.delete("/aluno/:id", (req, res) => {
     const id = Number(req.params.id);
 
     const existe = alunos.some(a => a.id === id);
@@ -107,3 +108,8 @@ app.delete("/aluno/:id", (rec, res) => {
     alunos = alunos.filter(a => a.id !== id);
     res.status(204).send();
 });
+
+// Iniciar servidor 
+app.listen(PORT, () => {
+    console.log(`API executando em http://localhost:${PORT}`);
+})
